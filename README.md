@@ -23,7 +23,7 @@ Website ini memungkinkan pengguna untuk melakukan beberapa tindakan, termasuk:
 - Manajemen Foto: Pengguna dapat menambahkan, menghapus, dan mengedit foto dalam album.
 
 
-## Teknologi yang Digunakan
+## Bahasa yang Digunakan
 
 - HTML, CSS, JavaScript untuk tampilan dan interaksi pengguna.
 - PHP sebagai bahasa pemrograman untuk sisi server.
