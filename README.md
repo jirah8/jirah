@@ -14,14 +14,22 @@ Website ini memungkinkan pengguna untuk melakukan beberapa tindakan, termasuk:
 - Menghapus foto dari album.
 - Melihat foto-foto dalam sebuah album.
 - Mengedit informasi album dan foto.
+- Menambahkan komentar pada postingan pengguna.
+- pengguna user dapat  menghapus komentarnya sendiri.
+- Admin dapat menghapus komen seluruh Pengguna.
+- Admin dapat mereport postingan yang dilaporkan.
+- Admin dapat melihat dan menghapus Data Pengguna.
 
 ## Fitur
-
-- Autentikasi pengguna: Pengguna harus login untuk mengakses fitur-fitur utama.
-- Tampilan album: Setiap album ditampilkan dengan thumbnail foto pertama di dalamnya.
-- Manajemen Album: Pengguna dapat membuat, menghapus, dan mengedit album mereka.
-- Manajemen Foto: Pengguna dapat menambahkan, menghapus, dan mengedit foto dalam album.
-
+-Daftar : Daftar adalah fitur untuk membuat atau menambah akun.
+-Login : Fitur ini ditampilkan sebagai alternatif masuk kedalam Website galeri foto. 
+-Website Galeri Foto : Fitur ini yang mana disini ditampilkan sebagai beranda semua album pengguna berada di Website galeri foto.
+-Home : Fitur ini ditampilkan sebagai koleksi album yang di posting pengguna tersebut jadi hanya album pengguna tersebut
+        yang berada didalam fitur Home ini.
+-Album : Disini fitur album sebagai tempat menambahkannya kategori album .
+-Foto : Foto adalah fitur menambahkan foto kedalam album (melakukan posting).
+-Profil : Fitur ini juga ditampilkan untuk menampilkan siapa yang login pada web tersebut selain itu juga di dalam profil 
+          terdapat Fitur Logout untuk keluar dari web tersebut.
 
 ## Bahasa yang Digunakan
 
