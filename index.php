@@ -1,5 +1,17 @@
 <?php 
 include "config/koneksi.php";
+
+// Setup paginasi
+$limit_per_page = 6; // Jumlah foto per halaman
+$current_page = isset($_GET['page']) ? $_GET['page'] : 1; // Tentukan halaman saat ini
+
+$offset = ($current_page - 1) * $limit_per_page;
+$query = mysqli_query($koneksi, "SELECT * FROM photos LIMIT $offset, $limit_per_page");
+
+// Pastikan query berhasil dieksekusi
+if (!$query) {
+    die("Query error: " . mysqli_error($koneksi)); 
+}
 ?>
 
 <!DOCTYPE html>
@@ -20,9 +32,9 @@ include "config/koneksi.php";
         justify-content: space-around; 
     }
     .card:hover {
-        transform: scale(1.05); /* Ubah ukuran saat dihover */
-        transition: transform 0.1s ease; /* Animasi transform */
-        box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5); /* Tambahkan bayangan */
+        transform: scale(1.05);
+        transition: transform 0.1s ease;
+        box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
     }
 </style>
 
@@ -46,9 +58,9 @@ include "config/koneksi.php";
 <div class="container mt-3">
     <div class="row">
         <?php 
-        while($data = mysqli_fetch_assoc($result)):
+        while($data = mysqli_fetch_assoc($query)):
         ?>
-        <div class="col-md-4 mb-3"> <!-- Ubah menjadi col-md-4 untuk 3 foto per baris -->
+        <div class="col-md-4 mb-3">
             <div class="card">
                 <img src="aset/img/<?= $data['image_path'] ?>" class="card-img-top" title="" alt="<?= $data['image_description'] ?>">
                 <div class="card-footer text-center">
