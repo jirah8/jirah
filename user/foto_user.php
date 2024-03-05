@@ -9,8 +9,20 @@ if ($_SESSION['status'] != 'login') {
     </script>";
 } else {
     $user_id = $_SESSION['user_id'];
+    // Hitung total data foto
+    $sqlCount = mysqli_query($koneksi, "SELECT COUNT(*) AS total FROM photos WHERE user_id='$user_id'");
+    $row = mysqli_fetch_assoc($sqlCount);
+    $total_records = $row['total'];
+    
+    // Pagination setup
+    $limit = 4;
+    $total_pages = ceil($total_records / $limit);
+    $page = isset($_GET['page']) && $_GET['page'] <= $total_pages ? $_GET['page'] : 1;
+    $start = ($page - 1) * $limit;
+    
+    // Fetch data with pagination
+    $sql1 = mysqli_query($koneksi, "SELECT * FROM photos WHERE user_id='$user_id' LIMIT $start, $limit");
 }
-$sql1 = mysqli_query($koneksi, "SELECT * FROM photos WHERE user_id='$user_id'");
 
 ?>
 
@@ -23,13 +35,28 @@ $sql1 = mysqli_query($koneksi, "SELECT * FROM photos WHERE user_id='$user_id'");
     <title>Website Galeri Foto</title>
     <link rel="stylesheet" type="text/css" href="../aset/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom CSS */
+        .navbar-nav .nav-link {
+            color: #333;
+            transition: color 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .navbar-nav .nav-link.active {
+             color: #007bff;
+            text-decoration: underline;
+        }
+    </style>
 </head>
-
 <body>
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container">
-  <a class="navbar-brand" href="index_album_user.php">Website Galeri Foto</a>
+    
+    <a class="navbar-brand" href="index_album_user.php">Website Galeri Foto</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -37,22 +64,31 @@ $sql1 = mysqli_query($koneksi, "SELECT * FROM photos WHERE user_id='$user_id'");
       <div class="navbar-nav me-auto">
         <a href="home_user.php" class="nav-link">Home</a>
         <a href="album_user.php" class="nav-link">Album</a>  
-        <a href="foto_user.php" class="nav-link">Foto</a>    
+        <a href="foto_user.php" class="nav-link">Foto</a>  
       </div>
-      
-      <div class="ml-auto">
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            User
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            
-            <a class="dropdown-item" href="../config/aksi_logout.php">Keluar</a>
-          </div>
-        </div>
+
+      <!-- profile img code -->
+      <div class="btn-group">
+        <button type="button" style='border:none;background-color:transparent;display:flex;flex-direction:row;justify-content:center;align-items:center;gap:8px' class="dropdown-toggle" style='' data-toggle="dropdown" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
+          <img id="profilee-img" class="img-circle img-responsive rounded-circle" src="../aset/img/profilee.png" width="40" height="40">
+          <p class='mb-0'><?= $_SESSION['username'] ?></p>
+        </button>
+        <ul class="dropdown-menu">
+          
+          <li class='cursor-pointer'><a id="logoutButton" class="text-danger m-1  dropdown-item" style="cursor:pointer">Logout</a></li>
+        </ul>
       </div>
-    </div>
+
   </div>
+  <script>
+    document.getElementById('logoutButton').addEventListener('click', function(event) {
+        event.preventDefault(); 
+       
+        if (confirm('Apakah Anda yakin ingin keluar?')) {
+            window.location.href = '../logout.php'; 
+        }
+    });
+</script>
 </nav>
 
 
@@ -114,13 +150,13 @@ $sql1 = mysqli_query($koneksi, "SELECT * FROM photos WHERE user_id='$user_id'");
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php
-                                $no = 1;
+                            <?php
+                                $no = ($page - 1) * $limit + 1;
                                 while ($data = mysqli_fetch_assoc($sql1)) {
                                 ?>
                                     <tr>
                                         <td><?php echo $no++ ?></td>
-                                        
+                                        <!-- Tampilkan gambar -->
                                         <td>
                                             <img src="../aset/img/<?php echo $data['image_path']?>" style="width:200px;height:150px" />
                                         </td>
@@ -230,6 +266,16 @@ $sql1 = mysqli_query($koneksi, "SELECT * FROM photos WHERE user_id='$user_id'");
 </script>
 
 
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center mt-3">
+        <?php if ($page > 1): ?>
+            <li class="page-item"><a class="page-link" href="?page=<?php echo $page - 1; ?>">Previous</a></li>
+        <?php endif; ?>
+        <?php if ($page < $total_pages): ?>
+            <li class="page-item"><a class="page-link" href="?page=<?php echo $page + 1; ?>">Next</a></li>
+        <?php endif; ?>
+    </ul>
+</nav>
 
 
 

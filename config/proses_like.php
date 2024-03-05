@@ -20,15 +20,22 @@ if (mysqli_num_rows($ceksuka) == 1) {
 
 if ($_SESSION['role'] == "admin") { 
     if ($redirect_page == 'home') {
-        header('location:../admin/home.php');
+        //header('location:../admin/home.php');
+        echo "<script>history.back()</script>";
     } else {
-        header('location:../admin/index.php');
+        //header('location:../admin/home.php');
+        echo "<script>history.back()</script>";
     }
+ 
 } else {
     if ($redirect_page == 'home') {
-        header('location:../user/home_user.php');
+        echo "<script>history.back()</script>";
+
+        //header('location:../user/home_user.php');
     } else {
-        header('location:../user/index_user.php');
+        echo "<script>history.back()</script>";
+
+        //header('location:../user/home_user.php');
     }
 }
 

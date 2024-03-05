@@ -39,7 +39,7 @@ if (isset($_POST['edit'])) {
     $album_id = $_POST['album_id'];
     $title = $_POST['title'];
     $description = $_POST['description'];
-    $created_at = date('Y-m-d');
+    $created_at = date('Y-m-d H:i:s');
 
 
     if ($_SESSION['role'] != 'admin') {
@@ -70,7 +70,7 @@ if (isset($_POST['hapus'])) {
 
 
     if ($_SESSION['role'] != 'admin') {
-
+        $deletephotos = mysqli_query($koneksi,"DELETE FROM photos WHERE album_id = '$album_id'");
         $stmt = $koneksi->prepare("DELETE FROM albums WHERE album_id=? AND user_id=?");
         $stmt->bind_param("ii", $album_id, $user_id);
         if ($stmt->execute()) {
@@ -80,7 +80,7 @@ if (isset($_POST['hapus'])) {
             echo "Gagal menghapus album. Silakan coba lagi.";
         }
     } else {
-
+        $deletephotos = mysqli_query($koneksi,"DELETE FROM photos WHERE album_id = '$album_id'");
         $stmt = $koneksi->prepare("DELETE FROM albums WHERE album_id=?");
         $stmt->bind_param("i", $album_id);
         if ($stmt->execute()) {

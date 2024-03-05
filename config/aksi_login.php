@@ -16,17 +16,18 @@ if (isset($_POST['Kirim'])) {
 
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['user_id'];
+        $_SESSION['username'] = $user['username'];
         $_SESSION['status'] = 'login';
-        $_SESSION['role'] = $user['acces_level'];
-        if($user['acces_level'] === "admin"){
-            header("Location: ../admin/index_album.php");
-        }
-        else if($user['acces_level'] === "user"){
-            header("Location: ../user/index_album_user.php");
-        }
-        
+        $_SESSION['role'] = $user['acces_level']; // Sesuaikan dengan nama kolom yang benar
 
-        exit();
+        // Sesuaikan halaman redirect sesuai kebutuhan
+        if ($_SESSION['role'] === "admin") {
+            header("Location: ../admin/index_album.php");
+            exit();
+        } else {
+            header("Location: ../user/index_album_user.php");
+            exit();
+        }
     } else {
         echo "<script>
         alert('Username atau password salah!');

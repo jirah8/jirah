@@ -42,6 +42,8 @@
                       <input type="password" name="password" class="form-control" required>
                       <label class="form-label">Email</label>
                       <input type="email" name="email" class="form-control" required>
+                      <!-- Input hidden untuk access_level -->
+                      <input type="hidden" name="acces_level" value="user">
                       <div class="d-grid mt-2">
                           <button class="btn btn-primary" type="submit" name="Kirim">Daftar</button>
                       </div>

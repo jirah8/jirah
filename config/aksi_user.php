@@ -11,6 +11,10 @@ function addUser($koneksi, $name, $username, $password, $access_level) {
 
 
 function deleteUser($koneksi, $user_id) {
+    $querydeletealbums = "DELETE FROM albums WHERE user_id = '$user_id'";
+    $querydeletephotos = "DELETE FROM photos WHERE user_id = '$user_id'";
+    mysqli_query($koneksi,$querydeletealbums);
+    mysqli_query($koneksi,$querydeletephotos);
     $query = "DELETE FROM users WHERE user_id = '$user_id'";
     return mysqli_query($koneksi, $query);
 }

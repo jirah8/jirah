@@ -9,7 +9,8 @@ if ($_SESSION['status'] != 'login') {
     </script>";
 } else {
     $user_id = $_SESSION['user_id'];
-    $sql = mysqli_query($koneksi, "SELECT * FROM users");
+    // Ubah kueri SQL untuk hanya mengambil pengguna yang bukan admin
+    $sql = mysqli_query($koneksi, "SELECT * FROM users WHERE acces_level != 'admin'");
     if (!$sql) {
         die("Query failed: " . mysqli_error($koneksi));
     }
@@ -26,12 +27,28 @@ if ($_SESSION['status'] != 'login') {
     <title>Website Galeri Foto</title>
     <link rel="stylesheet" type="text/css" href="../aset/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom CSS */
+        .navbar-nav .nav-link {
+            color: #333;
+            transition: color 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .navbar-nav .nav-link.active {
+            color: #007bff;
+            text-decoration: underline;
+        }
+    </style>
 </head>
-
 <body>
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container">
+    
     <a class="navbar-brand" href="index_album.php">Website Galeri Foto</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -40,31 +57,38 @@ if ($_SESSION['status'] != 'login') {
       <div class="navbar-nav me-auto">
         <a href="home.php" class="nav-link">Home</a>
         <a href="album.php" class="nav-link">Album</a>  
-        <a href="foto.php" class="nav-link">Foto</a>    
+        <a href="foto.php" class="nav-link">Foto</a> 
+        <a href="list_user.php" class="nav-link">Data</a>  
+        <a href="laporan.php" class="nav-link">Report</a>   
       </div>
-      <!-- Tombol dropdown ditempatkan di pojok kanan -->
-      <div class="ml-auto">
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Admin
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="list_user.php">Data</a>
-            <a class="dropdown-item" href="../config/aksi_logout.php">Keluar</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</nav>
-    <div class="container mt-3">
-    <td>
-     <form action="tambah_pengguna.php" method="post">
-     <input type="hidden" name="user_id" value="<?php echo $row['user_id']; ?>">
-     <button type="submit" name="deleteUser" class="btn btn-secondary btn-outline m mb-4" >Tambah Pengguna</button>
-     </form>
 
-     </td>
+      <!-- profile img code -->
+      <div class="btn-group">
+        <button type="button" style='border:none;background-color:transparent;display:flex;flex-direction:row;justify-content:center;align-items:center;gap:8px' class="dropdown-toggle" style='' data-toggle="dropdown" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
+          <img id="profilee-img" class="img-circle img-responsive rounded-circle" src="../aset/img/profilee.png" width="40" height="40">
+          <p class='mb-0'><?= $_SESSION['username'] ?></p>
+        </button>
+        <ul class="dropdown-menu">
+          
+          <li class='cursor-pointer'><a id="logoutButton" class="text-danger m-1 cursor-pointer dropdown-item" style="cursor:pointer">Logout</a></li>
+        </ul>
+      </div>
+
+  </div>
+  <script>
+    document.getElementById('logoutButton').addEventListener('click', function(event) {
+        event.preventDefault(); 
+       
+        if (confirm('Apakah Anda yakin ingin keluar?')) {
+            window.location.href = '../logout.php'; 
+        }
+    });
+</script>
+</nav>
+
+
+    <div class="container mt-3">
+   
      <div class='card'>
         <div class='card-header'>Data Pengguna</div>
         <div class='card-body'>
@@ -75,7 +99,7 @@ if ($_SESSION['status'] != 'login') {
                             <th>User ID</th>
                             <th>Name</th>
                             <th>Username</th>
-                            <th>Password</th>
+                          
                             <th>Access Level</th>
                             <th>Created At</th>
                             <th>Action</th>
@@ -88,15 +112,24 @@ if ($_SESSION['status'] != 'login') {
                                     <td><?php echo $row['user_id']; ?></td>
                                     <td><?php echo $row['name']; ?></td>
                                     <td><?php echo $row['username']; ?></td>
-                                    <td><?php echo $row['password']; ?></td>
+                                    
                                     <td><?php echo isset($row['acces_level']) ? $row['acces_level'] : ''; ?></td>
                                     <td><?php echo $row['created_at']; ?></td>
-                                    <td>
-                                        <form action="../config/aksi_user.php" method="post">
-                                            <input type="hidden" name="user_id" value="<?php echo $row['user_id']; ?>">
-                                            <button type="submit" name="deleteUser" class="btn btn-danger btn-sm">Delete</button>
-                                        </form>
-                                    </td>
+                                   
+<td>
+    <form action="../config/aksi_user.php" method="post" onsubmit="return confirmDelete()">
+        <input type="hidden" name="user_id" value="<?php echo $row['user_id']; ?>">
+        <button type="submit" name="deleteUser" class="btn btn-danger btn-sm">Delete</button>
+    </form>
+</td>
+
+
+<script>
+    function confirmDelete() {
+        return confirm('Apakah Anda yakin ingin menghapus pengguna ini?');
+    }
+</script>
+
                                 </tr>
                             <?php endwhile; ?>
                         <?php endif; ?>
@@ -108,7 +141,17 @@ if ($_SESSION['status'] != 'login') {
      </div>
 </div>
 
-
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../aset/js/bootstrap.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("#profile-link").click(function(){
+        $("#dropdown-menu").toggle();
+    });
+});
+</script>
 
 
     <script type="text/javascript" src="../aset/js/bootstrap.min.js"></script>

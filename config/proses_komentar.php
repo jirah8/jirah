@@ -27,8 +27,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         header('location: ' . $_SERVER['HTTP_REFERER']);
         exit;
-    } else {
+    }
+    else if(isset($_POST['komenid'])){
+        $komenid = $_POST['komenid'];
+
+        $query = mysqli_query($koneksi,"DELETE FROM comments WHERE comments_id = '$komenid'");
+
+        if($query){
+            header("Location:{$_SERVER['HTTP_REFERER']}");
+        }
+    } 
+    else if(isset($_POST['editkomentar'])){
+        $fotoid = $_POST['photo_id'];
+        $userid = $_SESSION['user_id'];
+        $isikomentar = $_POST['isikomentar'];
+    }   
+    else {
         echo "Invalid request!";
     }
 }
+
 ?>

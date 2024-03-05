@@ -9,16 +9,23 @@ include "config/koneksi.php";
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website Galeri Foto</title>
     <link rel="stylesheet" type="text/css" href="aset/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        .card-img-top {
-            height: 12rem;
-            object-fit: cover; /
-        }
-        .card-footer {
-            display: flex;
-            justify-content: space-around; 
-        }
-    </style>
+    .card-img-top {
+        height: 12rem;
+        object-fit: cover;
+    }
+    .card-footer {
+        display: flex;
+        justify-content: space-around; 
+    }
+    .card:hover {
+        transform: scale(1.05); /* Ubah ukuran saat dihover */
+        transition: transform 0.1s ease; /* Animasi transform */
+        box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5); /* Tambahkan bayangan */
+    }
+</style>
+
 </head>
 <body>
 
@@ -39,14 +46,14 @@ include "config/koneksi.php";
 <div class="container mt-3">
     <div class="row">
         <?php 
-            $result = mysqli_query($koneksi,"SELECT * FROM photos");
-            while($data = mysqli_fetch_assoc($result)):
+        while($data = mysqli_fetch_assoc($result)):
         ?>
-        <div class="col-md-3 mb-3">
+        <div class="col-md-4 mb-3"> <!-- Ubah menjadi col-md-4 untuk 3 foto per baris -->
             <div class="card">
                 <img src="aset/img/<?= $data['image_path'] ?>" class="card-img-top" title="" alt="<?= $data['image_description'] ?>">
                 <div class="card-footer text-center">
                     <a href="#">
+                    <i class="fa-regular fa-heart"></i>
                         <?php 
                             $result_like = mysqli_query($koneksi,"SELECT * FROM likes WHERE photo_id = '{$data['photo_id']}'");
                             echo mysqli_num_rows($result_like);
@@ -54,6 +61,7 @@ include "config/koneksi.php";
                         Suka
                     </a>
                     <a href="#">
+                    <i class="fa-regular fa-comment"></i>
                         <?php 
                             $result_comment = mysqli_query($koneksi,"SELECT * FROM photos WHERE photo_id = '{$data['photo_id']}'");
                             echo mysqli_num_rows($result_comment);
@@ -65,9 +73,19 @@ include "config/koneksi.php";
         </div>
         <?php endwhile ?>
     </div>
+
+    <!-- Paginasi -->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <?php if($current_page > 1): ?>
+            <li class="page-item"><a class="page-link" href="?page=<?= $current_page - 1 ?>">Previous</a></li>
+            <?php endif; ?>
+            <?php if(mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM photos")) > ($current_page * $limit_per_page)): ?>
+            <li class="page-item"><a class="page-link" href="?page=<?= $current_page + 1 ?>">Next</a></li>
+            <?php endif; ?>
+        </ul>
+    </nav>
 </div>
-
-
 
 <script type="text/javascript" src="aset/js/bootstrap.min.js"></script>
 </body>

@@ -9,8 +9,16 @@ if ($_SESSION['status'] != 'login') {
     </script>";
 } else {
     $user_id = $_SESSION['user_id'];
-    $sql = mysqli_query($koneksi, "SELECT * FROM albums WHERE user_id='$user_id'");
+    
+    // Pagination setup
+    $limit = 5;
+    $page = isset($_GET['page']) ? $_GET['page'] : 1;
+    $start = ($page - 1) * $limit;
+    
+    // Fetch data with pagination
+    $sql = mysqli_query($koneksi, "SELECT * FROM albums WHERE user_id='$user_id' LIMIT $start, $limit");
 }
+
 
 ?>
 
@@ -23,13 +31,28 @@ if ($_SESSION['status'] != 'login') {
     <title>Website Galeri Foto</title>
     <link rel="stylesheet" type="text/css" href="../aset/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom CSS */
+        .navbar-nav .nav-link {
+            color: #333;
+            transition: color 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .navbar-nav .nav-link.active {
+             color: #007bff;
+            text-decoration: underline;
+        }
+    </style>
 </head>
-
 <body>
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container">
-  <a class="navbar-brand" href="index_album_user.php">Website Galeri Foto</a>
+    
+    <a class="navbar-brand" href="index_album_user.php">Website Galeri Foto</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -37,22 +60,34 @@ if ($_SESSION['status'] != 'login') {
       <div class="navbar-nav me-auto">
         <a href="home_user.php" class="nav-link">Home</a>
         <a href="album_user.php" class="nav-link">Album</a>  
-        <a href="foto_user.php" class="nav-link">Foto</a>    
-      </div>
+        <a href="foto_user.php" class="nav-link">Foto</a> 
       
-      <div class="ml-auto">
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            User
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="../config/aksi_logout.php">Keluar</a>
-          </div>
-        </div>
       </div>
-    </div>
+
+       <!-- profile img code -->
+       <div class="btn-group">
+        <button type="button" style='border:none;background-color:transparent;display:flex;flex-direction:row;justify-content:center;align-items:center;gap:8px' class="dropdown-toggle" style='' data-toggle="dropdown" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
+          <img id="profilee-img" class="img-circle img-responsive rounded-circle" src="../aset/img/profilee.png" width="40" height="40">
+          <p class='mb-0'><?= $_SESSION['username'] ?></p>
+        </button>
+        <ul class="dropdown-menu">
+          
+          <li class='cursor-pointer'><a id="logoutButton" class="text-danger m-1  dropdown-item" style="cursor:pointer">Logout</a></li>
+        </ul>
+      </div>
+
   </div>
+  <script>
+    document.getElementById('logoutButton').addEventListener('click', function(event) {
+        event.preventDefault(); 
+       
+        if (confirm('Apakah Anda yakin ingin keluar?')) {
+            window.location.href = '../logout.php'; 
+        }
+    });
+</script>
 </nav>
+
 
     <div class="container">
         <div class="row">
@@ -61,7 +96,7 @@ if ($_SESSION['status'] != 'login') {
                     <div class="card-header">Tambah Album</div>
                     <div class="card-body">
                         <form action="../config/aksi_album.php" method="POST">
-                            
+                            <!-- Hapus input hidden untuk album_id -->
 
                             <div class="mb-3">
                                 <label for="title" class="form-label">Nama Album</label>
@@ -104,59 +139,74 @@ if ($_SESSION['status'] != 'login') {
                                         <td><?php echo $data['description'] ?></td>
                                         <td><?php echo $data['created_at'] ?></td>
                                         <td>
-                                            <!-- Modal Edit -->
-                          
-                               <div class="modal fade" id="edit<?php echo $data['album_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                  <div class="modal-content">
-                                   <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Edit Album</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                     <div class="modal-body">
-                                     <form action="../config/aksi_album.php" method="POST">
-                                  <input type="hidden" name="album_id" value="<?php echo $data['album_id'] ?>">
-                                    <div class="mb-3">
+                                          <!-- Modal Edit -->
+                            <div class="modal fade" id="edit<?php echo $data['album_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                             <div class="modal-dialog">
+                               <div class="modal-content">
+                                 <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Edit Album</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                               <div class="modal-body">
+                                 <!-- Isi form untuk mengedit album -->
+                               <form action="../config/aksi_album.php" method="POST">
+                               <input type="hidden" name="album_id" value="<?php echo $data['album_id'] ?>">
+
+                               <div class="form-group">
                                <label for="title" class="form-label">Nama Album</label>
-                                   <input type="text" name="title" class="form-control" value="<?php echo $data['title'] ?>" required>
-                               </div>
-                                <div class="mb-3">
-                                   <label for="deskripsi" class="form-label">Deskripsi</label>
-                                     <textarea class="form-control" name="description" required><?php echo $data['description'] ?></textarea>
+                                  <input type="text" name="title" class="form-control" value="<?php echo $data['title'] ?>" required>
+                                 </div>
+
+                                 <div class="form-group">
+                              <label for="deskripsi" class="form-label">Deskripsi</label>
+                              <textarea class="form-control" name="description" required><?php echo $data['description'] ?></textarea>
+                                </div>
+
+                              <button type="submit" class="btn btn-primary mt-2" name="edit">Simpan Perubahan</button>
+                              </form>
+                             </div>
+                             </div>
+                              </div>
+                             </div>
+
+
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit<?php echo $data['album_id'] ?>">
+                                                Edit
+                                            </button>
+
+                                            <div class="modal fade" id="edit<?php echo $data['album_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <!-- ... -->
+                                            </div>
+
+                                            <!-- Modal Hapus -->
+                             <div class="modal fade" id="hapus<?php echo $data['album_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                             <div class="modal-dialog">
+                               <div class="modal-content">
+                                 <div class="modal-header">
+                               <h5 class="modal-title" id="exampleModalLabel">Hapus Album</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                             <div class="modal-body">
+                            
+                             <p>Apakah Anda yakin ingin menghapus album ini?</p>
+
+                             <form action="../config/aksi_album.php" method="POST">
+                               <input type="hidden" name="album_id" value="<?php echo $data['album_id'] ?>">
+                                <button type="submit" class="btn btn-danger" name="hapus">Ya, Hapus</button>
+
+                                     </form>
                                    </div>
-                                <button type="submit" class="btn btn-primary" name="edit">Simpan Perubahan</button>
-                             </form>
-                           </div>
-                         </div>
-                        </div>
-                     </div>
+                                   </div>
+                                   </div>
+                                  </div>
 
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit<?php echo $data['album_id'] ?>">
-                         Edit
-                        </button>
-<!-- Modal Hapus -->
-<div class="modal fade" id="hapus<?php echo $data['album_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Hapus Album</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Apakah Anda yakin ingin menghapus album ini?</p>
-                <form action="../config/aksi_album.php" method="POST">
-                    <input type="hidden" name="album_id" value="<?php echo $data['album_id'] ?>">
-                    <button type="submit" class="btn btn-danger" name="hapus">Ya, Hapus</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapus<?php echo $data['album_id'] ?>">
+                                                Hapus
+                                            </button>
 
-<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hapus<?php echo $data['album_id'] ?>">
-    Hapus
-</button>
-
+                                            <div class="modal fade" id="hapus<?php echo $data['album_id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <!-- ... -->
+                                            </div>
 
                                         </td>
                                     </tr>
@@ -165,11 +215,22 @@ if ($_SESSION['status'] != 'login') {
                         </table>
                     </div>
                 </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination justify-content-center mt-3">
+                    <?php if ($page > 1): ?>
+                      <li class="page-item"><a class="page-link" href="?page=<?php echo $page - 1; ?>">Previous</a></li>
+                    <?php endif; ?>
+                    <?php if (mysqli_num_rows($sql) == $limit): ?>
+                      <li class="page-item"><a class="page-link" href="?page=<?php echo $page + 1; ?>">Next</a></li>
+                    <?php endif; ?>
+                  </ul>
+                </nav>
+                
             </div>
         </div>
     </div>
-
-
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
@@ -178,3 +239,4 @@ if ($_SESSION['status'] != 'login') {
 </body>
 
 </html>
+
