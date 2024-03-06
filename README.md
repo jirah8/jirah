@@ -18,7 +18,7 @@ Website ini memungkinkan pengguna untuk melakukan beberapa tindakan, termasuk:
 - pengguna user dapat  menghapus komentarnya sendiri.
 - Admin dapat menghapus komen seluruh Pengguna.
 - Admin dapat mereport postingan yang dilaporkan.
-- Admin dapat melihat dan menghapus Data Pengguna.
+- Admin dapat restore dan menghapus Data Pengguna.
 - User dapat melaporkan postingan pengguna lain.
 
 ## Fitur
@@ -32,7 +32,7 @@ Website ini memungkinkan pengguna untuk melakukan beberapa tindakan, termasuk:
 - Profil : Fitur ini juga ditampilkan untuk menampilkan siapa yang login pada web tersebut selain itu juga di dalam profil 
           terdapat Fitur Logout untuk keluar dari web tersebut.
 - Data : Fitur ini hanya ditampilkan untuk admin dengan kebutuhan melihat dan menghapus akun pengguna.
-- Report : Disini hanya admin yang memiliki fitur ini untuk mereport postingan yang dilaporkan. 
+- Report : Disini hanya admin yang memiliki fitur ini untuk mereport postingan yang dilaporkan.
 
 ## Bahasa yang Digunakan
 
