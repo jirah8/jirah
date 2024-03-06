@@ -101,7 +101,7 @@ if (!$query) {
     </button>
     <div class="collapse navbar-collapse mt-2" id="navbarNavAltMarkup">
       <div class="navbar-nav me-auto">
-        <a href="home.php" class="nav-link">Home</a>
+        <a href="home.php" class="nav-link">Koleksi</a>
         <a href="album.php" class="nav-link">Album</a>  
         <a href="foto.php" class="nav-link">Foto</a> 
         <a href="list_user.php" class="nav-link">Data</a>   
@@ -200,6 +200,7 @@ if (!$query) {
             </div>
             <div class="modal-body">
                 <div class="row">
+                <h6><p><?php echo $data['name']; ?></p></h6>
                     <!-- Deskripsi Foto -->
                     <div class="col-md-12">
                         <h6>Deskripsi Foto:</h6>

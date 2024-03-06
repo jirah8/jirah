@@ -9,16 +9,37 @@ function addUser($koneksi, $name, $username, $password, $access_level) {
     return mysqli_query($koneksi, $query);
 }
 
+if (isset($_POST['markAsDeleted'])) {
+    $user_id = $_POST['user_id'];
 
-function deleteUser($koneksi, $user_id) {
-    $querydeletealbums = "DELETE FROM albums WHERE user_id = '$user_id'";
-    $querydeletephotos = "DELETE FROM photos WHERE user_id = '$user_id'";
-    mysqli_query($koneksi,$querydeletealbums);
-    mysqli_query($koneksi,$querydeletephotos);
-    $query = "DELETE FROM users WHERE user_id = '$user_id'";
-    return mysqli_query($koneksi, $query);
+    $query = "UPDATE users SET is_deleted = 1 WHERE user_id = '$user_id'";
+    $result = mysqli_query($koneksi, $query);
+
+    if ($result) {
+        // Berhasil menandai pengguna sebagai dihapus
+        header("Location: ../config/list_user.php"); // Redirect ke halaman daftar pengguna
+        exit();
+    } else {
+        // Gagal menandai pengguna sebagai dihapus
+        echo "Gagal menandai pengguna sebagai dihapus.";
+    }
 }
 
+if (isset($_POST['markAsRestored'])) {
+    $user_id = $_POST['user_id'];
+
+    $query = "UPDATE users SET is_deleted = 0 WHERE user_id = '$user_id'";
+    $result = mysqli_query($koneksi, $query);
+
+    if ($result) {
+        // Berhasil menandai pengguna sebagai dipulihkan
+        header("Location: ../config/list_user.php"); // Redirect ke halaman daftar pengguna
+        exit();
+    } else {
+        // Gagal menandai pengguna sebagai dipulihkan
+        echo "Gagal memulihkan pengguna.";
+    }
+}
 
 function updateUser($koneksi, $user_id, $name, $username, $password, $access_level) {
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);

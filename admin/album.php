@@ -58,7 +58,7 @@ if ($_SESSION['status'] != 'login') {
     </button>
     <div class="collapse navbar-collapse mt-2" id="navbarNavAltMarkup">
       <div class="navbar-nav me-auto">
-        <a href="home.php" class="nav-link">Home</a>
+        <a href="home.php" class="nav-link">Koleksi</a>
         <a href="album.php" class="nav-link">Album</a>  
         <a href="foto.php" class="nav-link">Foto</a> 
         <a href="list_user.php" class="nav-link">Data</a>    
@@ -96,7 +96,7 @@ if ($_SESSION['status'] != 'login') {
                 <div class="card mt-2">
                     <div class="card-header">Tambah Album</div>
                     <div class="card-body">
-                        <form action="../config/aksi_album.php" method="POST">
+                        <form action="../config/proses_album.php" method="POST">
                             <!-- Hapus input hidden untuk album_id -->
 
                             <div class="mb-3">
@@ -150,7 +150,7 @@ if ($_SESSION['status'] != 'login') {
                                   </div>
                                <div class="modal-body">
                                  <!-- Isi form untuk mengedit album -->
-                               <form action="../config/aksi_album.php" method="POST">
+                               <form action="../config/proses_album.php" method="POST">
                                <input type="hidden" name="album_id" value="<?php echo $data['album_id'] ?>">
 
                                <div class="form-group">
@@ -191,7 +191,7 @@ if ($_SESSION['status'] != 'login') {
                             
                              <p>Apakah Anda yakin ingin menghapus album ini?</p>
 
-                             <form action="../config/aksi_album.php" method="POST">
+                             <form action="../config/proses_album.php" method="POST">
                                <input type="hidden" name="album_id" value="<?php echo $data['album_id'] ?>">
                                 <button type="submit" class="btn btn-danger" name="hapus">Ya, Hapus</button>
 

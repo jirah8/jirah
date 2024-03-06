@@ -62,7 +62,8 @@ if ($_SESSION['status'] != 'login') {
     </button>
     <div class="collapse navbar-collapse mt-2" id="navbarNavAltMarkup">
       <div class="navbar-nav me-auto">
-        <a href="home_user.php" class="nav-link">Home</a>
+        <a href="home_user.php" class="nav-link">Koleksi</a>
+        <a href="informasi.php" class="nav-link">Informasi</a>
         <a href="album_user.php" class="nav-link">Album</a>  
         <a href="foto_user.php" class="nav-link">Foto</a>  
       </div>
@@ -98,7 +99,7 @@ if ($_SESSION['status'] != 'login') {
                 <div class="card mt-2">
                     <div class="card-header">Tambah Foto</div>
                     <div class="card-body">
-                    <form action="../config/aksi_foto.php" method="POST" enctype="multipart/form-data">
+                    <form action="../config/proses_foto.php" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="title" class="form-label">Judul</label>
                         <input type="text" name="title" class="form-control" required>
@@ -174,7 +175,7 @@ if ($_SESSION['status'] != 'login') {
                                   </div>
                                <div class="modal-body">
                                
-                                 <form action="../config/aksi_foto.php" method="POST" enctype="multipart/form-data">
+                                 <form action="../config/proses_foto.php" method="POST" enctype="multipart/form-data">
 
                                <input type="hidden" name="album_id" value="<?php echo $data['album_id'] ?>">
                                <input type="hidden" name="photo_id" value="<?php echo $data['photo_id'] ?>">
@@ -223,7 +224,7 @@ if ($_SESSION['status'] != 'login') {
                             
                              <p>Apakah Anda yakin ingin menghapus album ini?</p>
 
-                             <form action="../config/aksi_foto.php?photo_id=<?php echo $data['photo_id'] ?>" method="POST">
+                             <form action="../config/proses_foto.php?photo_id=<?php echo $data['photo_id'] ?>" method="POST">
                                <input type="hidden" name="album_id" value="<?php echo $data['album_id'] ?>">
                                <input type="hidden" name="photo_id" value="<?php echo $data['photo_id'] ?>">
 

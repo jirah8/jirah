@@ -55,7 +55,7 @@ if ($_SESSION['status'] != 'login') {
     </button>
     <div class="collapse navbar-collapse mt-2" id="navbarNavAltMarkup">
       <div class="navbar-nav me-auto">
-        <a href="home.php" class="nav-link">Home</a>
+        <a href="home.php" class="nav-link">Koleksi</a>
         <a href="album.php" class="nav-link">Album</a>  
         <a href="foto.php" class="nav-link">Foto</a> 
         <a href="list_user.php" class="nav-link">Data</a>  
@@ -116,19 +116,23 @@ if ($_SESSION['status'] != 'login') {
                                     <td><?php echo isset($row['acces_level']) ? $row['acces_level'] : ''; ?></td>
                                     <td><?php echo $row['created_at']; ?></td>
                                    
-<td>
-    <form action="../config/aksi_user.php" method="post" onsubmit="return confirmDelete()">
-        <input type="hidden" name="user_id" value="<?php echo $row['user_id']; ?>">
-        <button type="submit" name="deleteUser" class="btn btn-danger btn-sm">Delete</button>
-    </form>
+                           <td>
+    <?php if ($row['is_deleted'] == 1) : ?>
+        <form action="../config/proses_user.php" method="post" onsubmit="return confirmRestore()">
+            <input type="hidden" name="user_id" value="<?php echo $row['user_id']; ?>">
+            <input type="hidden" name="markAsRestored"> <!-- Tambahkan input ini -->
+            <button type="submit" name="restoreUser" class="btn btn-success btn-sm">Restore</button>
+        </form>
+    <?php else : ?>
+        <form action="../config/proses_user.php" method="post" onsubmit="return confirmDelete()">
+            <input type="hidden" name="user_id" value="<?php echo $row['user_id']; ?>">
+            <input type="hidden" name="markAsDeleted"> <!-- Tambahkan input ini -->
+            <button type="submit" name="deleteUser" class="btn btn-danger btn-sm">Delete</button>
+        </form>
+    <?php endif; ?>
 </td>
 
 
-<script>
-    function confirmDelete() {
-        return confirm('Apakah Anda yakin ingin menghapus pengguna ini?');
-    }
-</script>
 
                                 </tr>
                             <?php endwhile; ?>

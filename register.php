@@ -32,7 +32,7 @@
                     <div class="text-center">
                     <h5>Daftar Akun Baru</h5>
                     </div>
-                    <form action="config/aksi_register.php" method="POST">
+                    <form action="config/proses_register.php" method="POST">
                      
                       <label class="form-label">Name</label>
                       <input type="text" name="name" class="form-control" required>

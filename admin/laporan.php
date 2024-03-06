@@ -47,6 +47,7 @@ if ($_SESSION['status'] != 'login') {
         }
     </style>
 </head>
+
 <body>
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -58,7 +59,7 @@ if ($_SESSION['status'] != 'login') {
     </button>
     <div class="collapse navbar-collapse mt-2" id="navbarNavAltMarkup">
       <div class="navbar-nav me-auto">
-        <a href="home.php" class="nav-link">Home</a>
+        <a href="home.php" class="nav-link">Koleksi</a>
         <a href="album.php" class="nav-link">Album</a>  
         <a href="foto.php" class="nav-link">Foto</a> 
         <a href="list_user.php" class="nav-link">Data</a>    
@@ -72,7 +73,6 @@ if ($_SESSION['status'] != 'login') {
           <p class='mb-0'><?= $_SESSION['username'] ?></p>
         </button>
         <ul class="dropdown-menu">
-          
           <li class='cursor-pointer'><a id="logoutButton" class="text-danger m-1  dropdown-item" style="cursor:pointer">Logout</a></li>
         </ul>
       </div>
@@ -81,14 +81,12 @@ if ($_SESSION['status'] != 'login') {
   <script>
     document.getElementById('logoutButton').addEventListener('click', function(event) {
         event.preventDefault(); 
-       
         if (confirm('Apakah Anda yakin ingin keluar?')) {
             window.location.href = '../logout.php'; 
         }
     });
 </script>
 </nav>
-
 
 <div class="container mt-3">
     <div class='card'>
@@ -100,7 +98,7 @@ if ($_SESSION['status'] != 'login') {
                         <tr>
                             <th>No</th>
                             <th>Isi Laporan</th>
-                            <th>Username</th>
+                            <th>Laporan Oleh</th>
                             <th>Postingan</th>
                             <th>Tanggal</th>
                             <th>Action</th>
@@ -108,9 +106,9 @@ if ($_SESSION['status'] != 'login') {
                     </thead>
                     <tbody>
                         <?php 
-                            $query = mysqli_query($koneksi,"SELECT laporan.*,photos.* FROM laporan INNER JOIN photos ON laporan.foto_id = photos.photo_id");
-                            $no = 1;
-                            while($data = mysqli_fetch_assoc($query)):
+                        $query = mysqli_query($koneksi,"SELECT laporan.*, photos.*, users.username AS owner_username FROM laporan INNER JOIN photos ON laporan.foto_id = photos.photo_id INNER JOIN users ON photos.user_id = users.user_id");
+                        $no = 1;
+                        while($data = mysqli_fetch_assoc($query)):
                         ?>
                         <tr>
                             <td><?= $no++ ?></td>
@@ -119,10 +117,50 @@ if ($_SESSION['status'] != 'login') {
                             <td><img src="../aset/img/<?= $data['image_path'] ?>" alt="" width='100' height='100'></td>
                             <td><?= $data['created_at']; ?></td>
                             <td>
-                                <form action='../config/hapus_postingan.php' method='POST' onsubmit="return confirm('Apakah anda ingin menghapus postingan ini?')">
-                                    <input type='hidden' name='id' value='<?= $data['photo_id'] ?>'>
-                                    <button type='submit' class='btn btn-danger btn-sm'>Delete</button>
-                                </form>
+                                <div class="btn-group" role="group">
+                                    <form action='../config/hapus_postingan.php' method='POST' onsubmit="return confirm('Apakah anda ingin menghapus postingan ini?')">
+                                        <input type='hidden' name='id' value='<?= $data['photo_id'] ?>'>
+                                        <button type='submit' class='btn btn-danger btn-sm'>Delete</button>
+                                    </form>
+                                    <!-- Tambahkan button check di sini -->
+                                    <button type='button' class='btn btn-primary btn-sm' data-toggle="modal"
+                                    data-target="#laporan<?= $data['laporan_id'] ?>">Check
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="laporan<?= $data['laporan_id']; ?>" tabindex="-1" aria-labelledby="komentarModalLabel<?= $data['laporan_id']; ?>" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="komentarModalLabel<?= $data['laporan_id']; ?>">Kirim Pesan Peringatan</h5>
+               
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p class='mb-2'>Anda yakin ingin mengirim pesan peringatan kepada <?= $data['owner_username'] ?> tentang laporan: "<?= $data['isi'] ?>"?</p>
+                        <form method='post' action='kirim_pesan.php'>
+                            <input type='hidden' name='laporan_id' value='<?= $data['laporan_id'] ?>'>
+                            <input type='hidden' name='username' value='<?= $_SESSION['username'] ?>'>
+                            <div class="form-group">
+                                <label for="pesan<?= $data['laporan_id'] ?>">Pesan:</label>
+                                <textarea class="form-control" id="pesan<?= $data['laporan_id'] ?>" name="pesan" rows="3" placeholder="Masukkan pesan peringatan"></textarea>
+                            </div>
+                            <button type='submit' class='btn btn-primary'>Kirim</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+                                </div>
                             </td>
                         </tr>
                         <?php endwhile ?>
@@ -133,12 +171,22 @@ if ($_SESSION['status'] != 'login') {
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../aset/js/bootstrap.min.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../aset/js/bootstrap.min.js"></script>
+<script>
+    function submitPesan(laporan_id) {
+        var pesan = document.getElementById('pesan' + laporan_id).value;
+        if (pesan.trim() !== '') {
+            document.getElementById('pesanForm' + laporan_id).submit();
+        } else {
+            alert('Silakan isi pesan peringatan terlebih dahulu.');
+        }
+    }
+</script>
+
 </body>
 
 </html>
-

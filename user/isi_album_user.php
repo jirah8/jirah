@@ -101,7 +101,8 @@ if (!$query) {
     </button>
     <div class="collapse navbar-collapse mt-2" id="navbarNavAltMarkup">
       <div class="navbar-nav me-auto">
-        <a href="home_user.php" class="nav-link">Home</a>
+        <a href="home_user.php" class="nav-link">Koleksi</a>
+        <a href="informasi.php" class="nav-link">Informasi</a>
         <a href="album_user.php" class="nav-link">Album</a>  
         <a href="foto_user.php" class="nav-link">Foto</a> 
       </div>

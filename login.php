@@ -33,7 +33,7 @@
                     <div class="text-center">
                     <h5> Login Aplikasi</h5>
                     </div>
-                    <form action="config/aksi_login.php" method="POST">
+                    <form action="config/proses_login.php" method="POST">
                     <label class="form-label">Username</label>
                     <input type="text" name="Username" class="form-control" required>
                     <label class="form-label">Password</label>

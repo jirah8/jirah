@@ -71,7 +71,7 @@ $start_from = ($current_page - 1) * $per_page;
     </button>
     <div class="collapse navbar-collapse mt-2" id="navbarNavAltMarkup">
       <div class="navbar-nav me-auto">
-        <a href="home.php" class="nav-link">Home</a>
+        <a href="home.php" class="nav-link">Koleksi</a>
         <a href="album.php" class="nav-link">Album</a>  
         <a href="foto.php" class="nav-link">Foto</a> 
         <a href="list_user.php" class="nav-link">Data</a>    
