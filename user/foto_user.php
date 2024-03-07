@@ -205,8 +205,8 @@ if ($_SESSION['status'] != 'login') {
 
 
                              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal<?php echo $data['photo_id'] ?>">
-                              Edit
-                             </button
+    Edit
+</button> 
 
                                             <div class="modal fade" id="edit<?php echo $data['foto'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                               

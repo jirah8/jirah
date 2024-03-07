@@ -70,24 +70,30 @@ include_once("../config/koneksi.php");
       </div>
  <!-- profile img code -->
  <div class="btn-group">
-        <button type="button" style='border:none;background-color:transparent;display:flex;flex-direction:row;justify-content:center;align-items:center;gap:8px' class="dropdown-toggle" style='' data-toggle="dropdown" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
-          <img id="profilee-img" class="img-circle img-responsive rounded-circle" src="../aset/img/profilee.png" width="40" height="40">
-          <p class='mb-0'><?= $_SESSION['username'] ?></p>
-        </button>
-        <ul class="dropdown-menu">
-          
-          <li class='cursor-pointer'><a id="logoutButton" class="text-danger m-1  dropdown-item" style="cursor:pointer">Logout</a></li>
-        </ul>
-      </div>
+    <button type="button" style='border:none;background-color:transparent;display:flex;flex-direction:row;justify-content:center;align-items:center;gap:8px' class="dropdown-toggle" style='' data-toggle="dropdown" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
+        <img id="profilee-img" class="img-circle img-responsive rounded-circle" src="../aset/img/profilee.png" width="40" height="40">
+        <p class='mb-0'><?= $_SESSION['username'] ?></p>
+    </button>
+    <ul class="dropdown-menu">
+       
+        <li class='cursor-pointer'><a id="sampahButton" class="text-secondary m-1 cursor-pointer dropdown-item" style="cursor:pointer">Sampah</a></li>
+        <li class='cursor-pointer'><a id="logoutButton" class="text-danger m-1 cursor-pointer dropdown-item" style="cursor:pointer">Logout</a></li>
+    </ul>
+</div>
+</div>
 
-  </div>
-  <script>
+<script>
     document.getElementById('logoutButton').addEventListener('click', function(event) {
         event.preventDefault(); 
-       
         if (confirm('Apakah Anda yakin ingin keluar?')) {
             window.location.href = '../logout.php'; 
         }
+    });
+
+  
+    document.getElementById('sampahButton').addEventListener('click', function(event) {
+        event.preventDefault(); 
+        window.location.href = 'sampah.php'; // Mengarahkan pengguna ke sampah.php saat tombol "Sampah" diklik
     });
 </script>
 </nav>
@@ -125,16 +131,16 @@ include_once("../config/koneksi.php");
             }
             ?>
             <div class="col-md-4">
-                <a href='isi_album.php?id_album=<?= $data['album_id']?>'>
-                    <div class="card mb-2">
-                        <button class="btn btn-primary album-button"><?= $data['title'] ?></button> <!-- Perubahan dilakukan di sini -->
-                        <!-- Button trigger modal -->
-                        <div class="btn btn-transparan" data-bs-toggle="modal" data-bs-target="#Komentar<?php echo $data['photo_id']?>"> <!-- Mengganti button dengan div -->
-                            <img src="../aset/img/<?php echo $data['selected_photo_id']?>" class="card-img-top" title="<?php echo $data['title'] ?>" style="height: 15rem;">
-                        </div>
-                    </div>
-                </a>
+    <a href='isi_album.php?id_album=<?= $data['album_id']?>'>
+        <div class="card mb-2">
+            <button class="btn btn-primary album-button"><?= $data['title'] ?></button> <!-- Perubahan dilakukan di sini -->
+            <!-- Button trigger modal -->
+            <div class="btn btn-transparan" data-bs-toggle="modal" data-bs-target="#Komentar<?= $data['selected_photo_id'] ?>"> <!-- Menggunakan selected_photo_id yang telah diambil dari query -->
+                <img src="../aset/img/<?php echo $data['selected_photo_id']?>" class="card-img-top" title="<?php echo $data['title'] ?>" style="height: 15rem;">
             </div>
+        </div>
+    </a>
+</div>
             <?php 
             $counter++; // Increment counter
         } ?>

@@ -2,42 +2,30 @@
 session_start();
 include 'koneksi.php';
 
-
 function addUser($koneksi, $name, $username, $password, $access_level) {
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
     $query = "INSERT INTO users (name, username, password, access_level, created_at) VALUES ('$name', '$username', '$hashedPassword', '$access_level', NOW())";
     return mysqli_query($koneksi, $query);
 }
 
-if (isset($_POST['markAsDeleted'])) {
-    $user_id = $_POST['user_id'];
-
-    $query = "UPDATE users SET is_deleted = 1 WHERE user_id = '$user_id'";
+function deleteUser($koneksi, $user_id) {
+    // Query untuk mengambil data pengguna yang akan dihapus
+    $query = "SELECT * FROM users WHERE user_id = '$user_id'";
     $result = mysqli_query($koneksi, $query);
+    $user_data = mysqli_fetch_assoc($result);
 
-    if ($result) {
-        // Berhasil menandai pengguna sebagai dihapus
-        header("Location: ../config/list_user.php"); // Redirect ke halaman daftar pengguna
-        exit();
+    // Query untuk memindahkan data pengguna yang dihapus ke tabel sampah
+    $insert_query = "INSERT INTO sampah (user_id, name, username, password, email, acces_level, created_at, is_deleted) 
+                     VALUES ('".$user_data['user_id']."', '".$user_data['name']."', '".$user_data['username']."', '".$user_data['password']."', 
+                     '".$user_data['email']."', '".$user_data['acces_level']."', '".$user_data['created_at']."', 1)";
+    $insert_result = mysqli_query($koneksi, $insert_query);
+    
+    if ($insert_result) {
+        // Jika data pengguna berhasil dipindahkan ke tabel sampah, lanjutkan proses penghapusan
+        $delete_query = "DELETE FROM users WHERE user_id = '$user_id'";
+        return mysqli_query($koneksi, $delete_query);
     } else {
-        // Gagal menandai pengguna sebagai dihapus
-        echo "Gagal menandai pengguna sebagai dihapus.";
-    }
-}
-
-if (isset($_POST['markAsRestored'])) {
-    $user_id = $_POST['user_id'];
-
-    $query = "UPDATE users SET is_deleted = 0 WHERE user_id = '$user_id'";
-    $result = mysqli_query($koneksi, $query);
-
-    if ($result) {
-        // Berhasil menandai pengguna sebagai dipulihkan
-        header("Location: ../config/list_user.php"); // Redirect ke halaman daftar pengguna
-        exit();
-    } else {
-        // Gagal menandai pengguna sebagai dipulihkan
-        echo "Gagal memulihkan pengguna.";
+        return false;
     }
 }
 
@@ -47,7 +35,7 @@ function updateUser($koneksi, $user_id, $name, $username, $password, $access_lev
     return mysqli_query($koneksi, $query);
 }
 
-
+// Cek apakah ada permintaan untuk menambah pengguna baru
 if (isset($_POST['addUser'])) {
     $name = $_POST['name'];
     $username = $_POST['username'];
@@ -61,7 +49,7 @@ if (isset($_POST['addUser'])) {
     }
 }
 
-
+// Cek apakah ada permintaan untuk menghapus pengguna
 if (isset($_POST['deleteUser'])) {
     $user_id = $_POST['user_id'];
     
@@ -72,7 +60,7 @@ if (isset($_POST['deleteUser'])) {
     }
 }
 
-
+// Cek apakah ada permintaan untuk memperbarui informasi pengguna
 if (isset($_POST['updateUser'])) {
     $user_id = $_POST['user_id'];
     $name = $_POST['name'];
@@ -87,6 +75,6 @@ if (isset($_POST['updateUser'])) {
     }
 }
 
-
+// Redirect kembali ke halaman sebelumnya
 header("Location: " . $_SERVER['HTTP_REFERER']);
 ?>

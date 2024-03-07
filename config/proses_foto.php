@@ -15,7 +15,7 @@ if (isset($_POST['tambah'])) {
     $foto = rand() . '-' . $image_path;
 
     if (move_uploaded_file($tmp, $lokasi . $foto)) {
-        $sql = mysqli_query($koneksi, "INSERT INTO photos (user_id, album_id, title, description, image_path, created_at) 
+        $sql = mysqli_query($koneksi, "INSERT INTO photos (user_id, album_id, title, description, image_path, created_at)
         VALUES ('$user_id', '$album_id', '$title', '$description','$foto', '$created_at')");
 
         if ($sql) {

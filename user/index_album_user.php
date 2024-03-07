@@ -37,7 +37,7 @@ include_once("../config/koneksi.php");
     .album-button {
         width: 100%;
         text-align: center;
-        transition: transform 0.3s ease; /* Menambahkan transisi */
+        transition: transform 0.3s ease; 
     }
     .album-button:hover {
         transform: scale(1.1); /* Mengubah skala saat disentuh */
@@ -120,17 +120,19 @@ include_once("../config/koneksi.php");
                 echo '</div><div class="row">';
             }
         ?>
-            <div class="col-md-4">
-                <a href='isi_album_user.php?id_album=<?= $data['album_id']?>'>
-                    <div class="card mb-2">
-                        <button class="btn btn-primary album-button"><?= $data['title'] ?></button> <!-- Perubahan dilakukan di sini -->
-                        <!-- Button trigger modal -->
-                        <div class="btn btn-transparan" data-bs-toggle="modal" data-bs-target="#Komentar<?php echo $data['photo_id']?>"> <!-- Mengganti button dengan div -->
-                            <img src="../aset/img/<?php echo $data['selected_photo_id']?>" class="card-img-top" title="<?php echo $data['title'] ?>" style="height: 15rem;">
-                        </div>
-                    </div>
-                </a>
+         <div class="col-md-4">
+    <div class="card mb-2">
+        <a href='isi_album_user.php?id_album=<?= $data['album_id']?>' class="btn btn-primary album-button"><?= $data['title'] ?></a> <!-- Tombol album -->
+        <!-- Gambar album -->
+        <a href='isi_album_user.php?id_album=<?= $data['album_id']?>'>
+            <div class="btn btn-transparan" data-bs-toggle="modal" data-bs-target="#Komentar<?= $data['selected_photo_id'] ?>"> <!-- Menggunakan selected_photo_id yang telah diambil dari query -->
+                <img src="../aset/img/<?php echo $data['selected_photo_id']?>" class="card-img-top" title="<?php echo $data['title'] ?>" style="height: 15rem;">
             </div>
+        </a>
+    </div>
+</div>
+
+
             <?php 
             $counter++; // Increment counter
         } ?>

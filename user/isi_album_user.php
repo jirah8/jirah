@@ -172,13 +172,12 @@ if (!$query) {
             $jumlah_komentar = 0;
             while($komentar = mysqli_fetch_assoc($jmlkomen)){
                 if (is_komentar_buruk($komentar['comment_text'])) {
-                    continue; // Lewati komentar buruk
+                    continue; 
                 }
                 $jumlah_komentar++;
 
             }
-            //echo "<p style='word-wrap: break-word;'><strong>" . $komentar['username'] . ":</strong> " . $komentar['comment_text'] . "</p>"; // Tambahkan style word-wrap: break-word; pada tag p
-            //$jumlah_komentar = mysqli_num_rows($jmlkomen);
+            
             echo $jumlah_komentar . ' komentar';
         } else {
             echo "0 komentar";

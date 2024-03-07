@@ -109,24 +109,30 @@ if (!$query) {
       </div>
        <!-- profile img code -->
        <div class="btn-group">
-        <button type="button" style='border:none;background-color:transparent;display:flex;flex-direction:row;justify-content:center;align-items:center;gap:8px' class="dropdown-toggle" style='' data-toggle="dropdown" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
-          <img id="profilee-img" class="img-circle img-responsive rounded-circle" src="../aset/img/profilee.png" width="40" height="40">
-          <p class='mb-0'><?= $_SESSION['username'] ?></p>
-        </button>
-        <ul class="dropdown-menu">
-          
-          <li class='cursor-pointer'><a id="logoutButton" class="text-danger m-1  dropdown-item" style="cursor:pointer">Logout</a></li>
-        </ul>
-      </div>
+    <button type="button" style='border:none;background-color:transparent;display:flex;flex-direction:row;justify-content:center;align-items:center;gap:8px' class="dropdown-toggle" style='' data-toggle="dropdown" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
+        <img id="profilee-img" class="img-circle img-responsive rounded-circle" src="../aset/img/profilee.png" width="40" height="40">
+        <p class='mb-0'><?= $_SESSION['username'] ?></p>
+    </button>
+    <ul class="dropdown-menu">
+       
+        <li class='cursor-pointer'><a id="sampahButton" class="text-secondary m-1 cursor-pointer dropdown-item" style="cursor:pointer">Sampah</a></li>
+        <li class='cursor-pointer'><a id="logoutButton" class="text-danger m-1 cursor-pointer dropdown-item" style="cursor:pointer">Logout</a></li>
+    </ul>
+</div>
+</div>
 
-  </div>
-  <script>
+<script>
     document.getElementById('logoutButton').addEventListener('click', function(event) {
         event.preventDefault(); 
-       
         if (confirm('Apakah Anda yakin ingin keluar?')) {
             window.location.href = '../logout.php'; 
         }
+    });
+
+  
+    document.getElementById('sampahButton').addEventListener('click', function(event) {
+        event.preventDefault(); 
+        window.location.href = 'sampah.php'; // Mengarahkan pengguna ke sampah.php saat tombol "Sampah" diklik
     });
 </script>
 </nav>
@@ -134,11 +140,12 @@ if (!$query) {
 <!-- Tampilkan judul dan deskripsi album -->
 <div class="container mt-3">
     <div class="row">
-        <div class="col">
-            <h2><?php echo $album_title; ?></h2>
-            <p><?php echo $album_description; ?></p>
-            <p><?php echo $album_created_at; ?></p>
-        </div>
+    <div class="col">
+    <h2><?php echo $album_title; ?></h2>
+    <p><?php echo $album_description; ?></p>
+    <p><?php echo $album_created_at; ?></p>
+    </div>
+
     </div>
 </div>
 
@@ -178,8 +185,7 @@ if (!$query) {
                 $jumlah_komentar++;
 
             }
-            //echo "<p style='word-wrap: break-word;'><strong>" . $komentar['username'] . ":</strong> " . $komentar['comment_text'] . "</p>"; // Tambahkan style word-wrap: break-word; pada tag p
-            //$jumlah_komentar = mysqli_num_rows($jmlkomen);
+            
             echo $jumlah_komentar . ' komentar';
         } else {
             echo "0 komentar";

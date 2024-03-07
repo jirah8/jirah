@@ -57,15 +57,13 @@ if (!$query) {
 
 <div class="container mt-3">
     <div class="row">
-        <?php 
-        while($data = mysqli_fetch_assoc($query)):
-        ?>
+        <?php while($data = mysqli_fetch_assoc($query)): ?>
         <div class="col-md-4 mb-3">
             <div class="card">
-                <img src="aset/img/<?= $data['image_path'] ?>" class="card-img-top" title="" alt="<?= $data['image_description'] ?>">
+                <img src="aset/img/<?= $data['image_path'] ?>" class="card-img-top" title="" alt="<?= $data['description'] ?>">
                 <div class="card-footer text-center">
                     <a href="#">
-                    <i class="fa-regular fa-heart"></i>
+                        <i class="fa-regular fa-heart"></i>
                         <?php 
                             $result_like = mysqli_query($koneksi,"SELECT * FROM likes WHERE photo_id = '{$data['photo_id']}'");
                             echo mysqli_num_rows($result_like);
@@ -73,7 +71,7 @@ if (!$query) {
                         Suka
                     </a>
                     <a href="#">
-                    <i class="fa-regular fa-comment"></i>
+                        <i class="fa-regular fa-comment"></i>
                         <?php 
                             $result_comment = mysqli_query($koneksi,"SELECT * FROM photos WHERE photo_id = '{$data['photo_id']}'");
                             echo mysqli_num_rows($result_comment);
@@ -83,16 +81,25 @@ if (!$query) {
                 </div>
             </div>
         </div>
-        <?php endwhile ?>
+        <?php endwhile; ?>
     </div>
 
     <!-- Paginasi -->
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <?php if($current_page > 1): ?>
+            <!-- Tombol "Previous" hanya ditampilkan jika halaman saat ini bukan halaman pertama -->
             <li class="page-item"><a class="page-link" href="?page=<?= $current_page - 1 ?>">Previous</a></li>
             <?php endif; ?>
-            <?php if(mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM photos")) > ($current_page * $limit_per_page)): ?>
+            <?php 
+            // Hitung jumlah total data
+            $total_data = mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM photos"));
+            
+            // Hitung halaman terakhir
+            $last_page = ceil($total_data / $limit_per_page);
+            
+            // Tampilkan tombol "Next" jika halaman saat ini tidak sama dengan halaman terakhir
+            if($current_page < $last_page): ?>
             <li class="page-item"><a class="page-link" href="?page=<?= $current_page + 1 ?>">Next</a></li>
             <?php endif; ?>
         </ul>

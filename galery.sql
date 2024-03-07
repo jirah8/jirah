@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 05, 2024 at 05:47 PM
--- Server version: 10.4.25-MariaDB
--- PHP Version: 7.4.30
+-- Generation Time: Mar 07, 2024 at 07:16 AM
+-- Server version: 10.4.17-MariaDB
+-- PHP Version: 8.0.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -46,7 +46,10 @@ INSERT INTO `albums` (`album_id`, `user_id`, `title`, `description`, `created_at
 (76, 12372, 'Jenis Bunga', 'Bunga adalah bagian dari tanaman yang umumnya berpenampilan indah dan mengeluarkan aroma wangi.', '2024-03-05 04:16:06'),
 (77, 12373, 'Pantai', 'Daerah pantai menjadi batas antara daratan dan perairan laut. Kawasan pantai berbeda dengan pesisir walaupun antara keduanya saling berkaitan.', '2024-03-05 04:33:21'),
 (78, 12374, 'Bali', 'Bali adalah pulau yang sangat indah dengan panjang garis pantai sekitar 633,35 km.', '2024-03-05 04:45:11'),
-(79, 12371, 'Madinah', 'Madinah menjadi kota terpenting bagi Rasulullah selain Kota Mekkah.', '2024-03-05 05:32:27');
+(79, 12371, 'Madinah', 'Madinah menjadi kota terpenting bagi Rasulullah selain Kota Mekkah.', '2024-03-05 05:32:27'),
+(80, 12375, 'Kutub Utara', 'Kutub Utara adalah titik paling utara dari bola bumi, merupakan satu-satunya titik yang dilalui oleh garis khayal 90 derajat Lintang Utara.', '2024-03-05 10:44:25'),
+(86, 12375, 'Jepang', 'Jepang adalah salah satu negara yang terletak di wilayah Asia Timur.', '2024-03-05 10:54:24'),
+(87, 12376, 'apa aja dulu.', 'masukan sesuatu disini ', '2024-03-07 02:26:37');
 
 -- --------------------------------------------------------
 
@@ -62,13 +65,6 @@ CREATE TABLE `comments` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `comments`
---
-
-INSERT INTO `comments` (`comments_id`, `user_id`, `photo_id`, `comment_text`, `created_at`) VALUES
-(71, 12371, 100, 'jelek', '2024-03-04 17:00:00');
-
 -- --------------------------------------------------------
 
 --
@@ -80,8 +76,17 @@ CREATE TABLE `laporan` (
   `isi` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `foto_id` int(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `owner_username` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `laporan`
+--
+
+INSERT INTO `laporan` (`laporan_id`, `isi`, `username`, `foto_id`, `created_at`, `owner_username`) VALUES
+(13, '/', 'User1', 129, '2024-03-05 17:00:00', ''),
+(14, '///', 'User1', 147, '2024-03-05 17:00:00', '');
 
 -- --------------------------------------------------------
 
@@ -168,6 +173,29 @@ INSERT INTO `likes` (`like_id`, `user_id`, `photo_id`, `created_at`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `pesan_peringatan`
+--
+
+CREATE TABLE `pesan_peringatan` (
+  `id` int(11) NOT NULL,
+  `laporan_id` int(11) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `pesan` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `pesan_peringatan`
+--
+
+INSERT INTO `pesan_peringatan` (`id`, `laporan_id`, `username`, `pesan`, `created_at`) VALUES
+(1, 13, 'User1', 'anda melakukan pelanggaran', '2024-03-06 20:01:20'),
+(2, 13, 'User1', 'nmh,ghg', '2024-03-06 20:02:25'),
+(3, 13, 'User1', 'sbdkgdg', '2024-03-06 20:15:21');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `photos`
 --
 
@@ -230,7 +258,46 @@ INSERT INTO `photos` (`photo_id`, `user_id`, `title`, `description`, `image_path
 (153, 12371, 'Madinah', 'Keindahan kota maddinah', '1009550169-madinah3.jpeg', '2024-03-04 22:35:49', 79),
 (154, 12371, 'Madinah', 'Tidak diragukan keindahan kota maidinah', '500547667-madinah5.jpg', '2024-03-04 22:36:37', 79),
 (155, 12371, 'Madinah', 'Salah satu kota terindah', '1491386701-madinah4.jpg', '2024-03-04 22:37:21', 79),
-(156, 12371, 'Madinah', 'Madinah indah sekali', '1555303576-madinah2.jpg', '2024-03-04 22:38:35', 79);
+(156, 12371, 'Madinah', 'Madinah indah sekali', '1555303576-madinah2.jpg', '2024-03-04 22:38:35', 79),
+(157, 12375, 'Kutub Utara', 'Terlihat disini sangat indah sekali', '1641009213-kutub utara1.webp', '2024-03-05 03:45:41', 80),
+(158, 12375, 'Kutub Utara', 'Tidak heran banyak hewan buas di daerah ini ', '1986112513-kutub utara5.jpg', '2024-03-05 03:46:22', 80),
+(159, 12375, 'Kutub Utara', 'Terlihat disini sangat indah sekali', '1028093700-kutub utara4.jpg', '2024-03-05 03:46:53', 80),
+(160, 12375, 'Kutub Utara', 'Terlihat disini sangat indah sekali', '612018809-kutub utara6.jpg', '2024-03-05 03:47:25', 80),
+(161, 12375, 'Kutub Utara', 'Terlihat disini sangat indah sekali', '1598530190-kutub utara2.jpg', '2024-03-05 03:47:51', 80),
+(162, 12375, 'Kutub Utara', 'Terlihat disini sangat indah sekali', '1933865751-kutub utara3.jpg', '2024-03-05 03:48:18', 80),
+(163, 12375, 'Jepang', 'salah satu keindahan dinegara jepang', '564086142-jepang1.webp', '2024-03-05 03:55:09', 86),
+(164, 12375, 'Jepang', 'Salah satu keindahan di negara Jepanng.', '2070239901-jepang5.jpg', '2024-03-05 03:55:57', 86),
+(165, 12375, 'Jepang ', 'Salah satu keindahan di negara jepang', '456600753-jepang4.jpg', '2024-03-05 03:56:30', 86),
+(166, 12375, 'Jepang', 'Salah satu keindahan di negara jepang', '48133511-jepang5.jpg', '2024-03-05 03:56:50', 86),
+(167, 12375, 'Jepang', 'Salah satu keindahan di negara jepang', '353270952-jepang3.jpg', '2024-03-05 03:57:15', 86),
+(168, 12375, 'Jepang', 'Salah satu keindahan di negara jepang', '964929767-jepang7.jpg', '2024-03-05 03:58:46', 86),
+(169, 12376, 'apapun.', 'yang penting ngisi', '473677443-air_terjun2.webp', '2024-03-07 01:28:58', 87);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sampah`
+--
+
+CREATE TABLE `sampah` (
+  `user_id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `acces_level` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `is_deleted` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `sampah`
+--
+
+INSERT INTO `sampah` (`user_id`, `name`, `username`, `password`, `email`, `acces_level`, `created_at`, `is_deleted`) VALUES
+(12374, 'User4', 'User4', '$2y$10$rokD.TZV6W09QybKTqGKy.Qi/w985vgAe9bCkWumdvnmn5bbNdtbO', 'User4@gmail.com', 'user', '2024-03-05 01:11:24', 1),
+(12375, 'User5', 'User5', '$2y$10$LU.3HzHTOt0iruDGfRlBjO.BaKVn/68/ByQXrPHa/Oz0HKsBNGCNy', 'user5@gmail.com', 'user', '2024-03-07 04:48:16', 1),
+(12379, 'jirahnursukma', 'jirahnursukma', '$2y$10$UfTlF5PY75uhLgat/PR24.tr/lqmPJH1r04uAopotyUO939LZB/Wu', 'jirahnursukma3@gmail.com', 'user', '2024-03-07 04:48:22', 1);
 
 -- --------------------------------------------------------
 
@@ -246,19 +313,19 @@ CREATE TABLE `users` (
   `email` varchar(100) NOT NULL,
   `acces_level` varchar(255) NOT NULL,
   `img` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `is_deleted` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `name`, `username`, `password`, `email`, `acces_level`, `img`, `created_at`) VALUES
-(12369, 'Admin', 'Admin', '$2y$10$ThnaZmg1MwwQLNg9wM6cPuwpIAMrAJqlQdqVNgruxoq89BOqqsLNq', 'admin@gmail.com', 'admin', '', '2024-03-03 11:39:10'),
-(12371, 'User1', 'User1', '$2y$10$YTaF1eFMo2oE7pjLdLyF6.lUMTd0SnPvv7m1KvqQN0fxkU/uFz/uS', 'User1@gmail.com', 'user', '', '2024-03-05 01:08:44'),
-(12372, 'User2', 'User2', '$2y$10$HO1TYjhut0zdFlzryVDGAe5Lj87PpSBTf1.hbWLkR0pa2.aM9PXl2', 'User2@gmail.com', 'user', '', '2024-03-05 01:10:29'),
-(12373, 'User3', 'User3', '$2y$10$JqkvlH8m4I.JHat.7A61ee5ANTf9rT.AEHOeb9fBcxUd/lCuPeKyW', 'User3@gmail.com', 'user', '', '2024-03-05 01:10:52'),
-(12374, 'User4', 'User4', '$2y$10$rokD.TZV6W09QybKTqGKy.Qi/w985vgAe9bCkWumdvnmn5bbNdtbO', 'User4@gmail.com', 'user', '', '2024-03-05 01:11:24');
+INSERT INTO `users` (`user_id`, `name`, `username`, `password`, `email`, `acces_level`, `img`, `created_at`, `is_deleted`) VALUES
+(12369, 'Admin', 'Admin', '$2y$10$ThnaZmg1MwwQLNg9wM6cPuwpIAMrAJqlQdqVNgruxoq89BOqqsLNq', 'admin@gmail.com', 'admin', '', '2024-03-03 11:39:10', 0),
+(12371, 'User1', 'User1', '$2y$10$YTaF1eFMo2oE7pjLdLyF6.lUMTd0SnPvv7m1KvqQN0fxkU/uFz/uS', 'User1@gmail.com', 'user', '', '2024-03-05 01:08:44', 0),
+(12372, 'User2', 'User2', '$2y$10$HO1TYjhut0zdFlzryVDGAe5Lj87PpSBTf1.hbWLkR0pa2.aM9PXl2', 'User2@gmail.com', 'user', '', '2024-03-05 01:10:29', 0),
+(12373, 'User3', 'User3', '$2y$10$JqkvlH8m4I.JHat.7A61ee5ANTf9rT.AEHOeb9fBcxUd/lCuPeKyW', 'User3@gmail.com', 'user', '', '2024-03-05 01:10:52', 0);
 
 --
 -- Indexes for dumped tables
@@ -289,11 +356,23 @@ ALTER TABLE `likes`
   ADD PRIMARY KEY (`like_id`);
 
 --
+-- Indexes for table `pesan_peringatan`
+--
+ALTER TABLE `pesan_peringatan`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `photos`
 --
 ALTER TABLE `photos`
   ADD PRIMARY KEY (`photo_id`),
   ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `sampah`
+--
+ALTER TABLE `sampah`
+  ADD PRIMARY KEY (`user_id`);
 
 --
 -- Indexes for table `users`
@@ -309,19 +388,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `albums`
 --
 ALTER TABLE `albums`
-  MODIFY `album_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `album_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
 
 --
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `comments_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `comments_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT for table `laporan`
 --
 ALTER TABLE `laporan`
-  MODIFY `laporan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `laporan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `likes`
@@ -330,16 +409,28 @@ ALTER TABLE `likes`
   MODIFY `like_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=146;
 
 --
+-- AUTO_INCREMENT for table `pesan_peringatan`
+--
+ALTER TABLE `pesan_peringatan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `photos`
 --
 ALTER TABLE `photos`
-  MODIFY `photo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=157;
+  MODIFY `photo_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=170;
+
+--
+-- AUTO_INCREMENT for table `sampah`
+--
+ALTER TABLE `sampah`
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12380;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12375;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12380;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

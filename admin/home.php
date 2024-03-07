@@ -79,24 +79,30 @@ $start_from = ($current_page - 1) * $per_page;
       </div>
  <!-- profile img code -->
  <div class="btn-group">
-        <button type="button" style='border:none;background-color:transparent;display:flex;flex-direction:row;justify-content:center;align-items:center;gap:8px' class="dropdown-toggle" style='' data-toggle="dropdown" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
-          <img id="profilee-img" class="img-circle img-responsive rounded-circle"src="../aset/img/profilee.png" width="40" height="40">
-          <p class='mb-0'><?= $_SESSION['username'] ?></p>
-        </button>
-        <ul class="dropdown-menu">
-          
-          <li class='cursor-pointer'><a id="logoutButton" class="text-danger m-1  dropdown-item" style="cursor:pointer">Logout</a></li>
-        </ul>
-      </div>
+    <button type="button" style='border:none;background-color:transparent;display:flex;flex-direction:row;justify-content:center;align-items:center;gap:8px' class="dropdown-toggle" style='' data-toggle="dropdown" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
+        <img id="profilee-img" class="img-circle img-responsive rounded-circle" src="../aset/img/profilee.png" width="40" height="40">
+        <p class='mb-0'><?= $_SESSION['username'] ?></p>
+    </button>
+    <ul class="dropdown-menu">
+       
+        <li class='cursor-pointer'><a id="sampahButton" class="text-secondary m-1 cursor-pointer dropdown-item" style="cursor:pointer">Sampah</a></li>
+        <li class='cursor-pointer'><a id="logoutButton" class="text-danger m-1 cursor-pointer dropdown-item" style="cursor:pointer">Logout</a></li>
+    </ul>
+</div>
+</div>
 
-  </div>
-  <script>
+<script>
     document.getElementById('logoutButton').addEventListener('click', function(event) {
         event.preventDefault(); 
-       
         if (confirm('Apakah Anda yakin ingin keluar?')) {
             window.location.href = '../logout.php'; 
         }
+    });
+
+  
+    document.getElementById('sampahButton').addEventListener('click', function(event) {
+        event.preventDefault(); 
+        window.location.href = 'sampah.php'; // Mengarahkan pengguna ke sampah.php saat tombol "Sampah" diklik
     });
 </script>
 </nav>
